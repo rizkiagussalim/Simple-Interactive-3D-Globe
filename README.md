@@ -1,47 +1,47 @@
 # 🌍 Interactive 3D Globe with GeoJSON Data
 
-Sebuah aplikasi web interaktif yang menampilkan globe 3D dengan data lokasi kota-kota dunia menggunakan Three.js dan WebGL.
+An interactive web application that displays a 3D globe with world city location data using Three.js and WebGL.
 
-## ✨ Fitur
+## ✨ Features
 
-- **Globe 3D Realistis**: Bumi dengan tekstur foto satelit yang detail
-- **Interaktivitas Penuh**: Kontrol mouse untuk rotasi, zoom, dan pan
-- **Lokasi Kota**: Titik-titik merah yang menandai kota-kota penting dunia
-- **Popup Informasi**: Klik pada titik untuk melihat nama kota
-- **Responsif**: Menyesuaikan dengan berbagai ukuran layar
-- **Anti-aliasing**: Render yang halus dan berkualitas tinggi
+- **Realistic 3D Globe**: Earth with detailed satellite photo texture
+- **Full Interactivity**: Mouse controls for rotation, zoom, and pan
+- **City Locations**: Red dots marking important world cities
+- **Information Popup**: Click on dots to see city names
+- **Responsive**: Adapts to various screen sizes
+- **Anti-aliasing**: Smooth and high-quality rendering
 
-## 🚀 Cara Menggunakan
+## 🚀 How to Use
 
-1. **Buka file `index.html`** di browser modern yang mendukung WebGL
-2. **Kontrol Navigasi**:
-   - **Klik & Drag**: Putar globe
+1. **Open `index.html` file** in a modern browser that supports WebGL
+2. **Navigation Controls**:
+   - **Click & Drag**: Rotate globe
    - **Scroll**: Zoom in/out
-   - **Klik kanan & Drag**: Geser view
-3. **Interaksi dengan Kota**: Klik pada titik merah untuk melihat nama kota
+   - **Right Click & Drag**: Pan view
+3. **City Interaction**: Click on red dots to see city names
 
-## 🛠️ Teknologi yang Digunakan
+## 🛠️ Technologies Used
 
-- **Three.js 0.160.0**: Library 3D graphics untuk web
+- **Three.js 0.160.0**: 3D graphics library for web
 - **WebGL**: Hardware-accelerated 3D rendering
-- **ES6 Modules**: Modern JavaScript dengan import/export
-- **GeoJSON**: Format data geografis standar
-- **HTML5 Canvas**: Rendering surface untuk WebGL
+- **ES6 Modules**: Modern JavaScript with import/export
+- **GeoJSON**: Standard geographic data format
+- **HTML5 Canvas**: WebGL rendering surface
 
-## 📁 Struktur Kode
+## 📁 Code Structure
 
-### Setup Scene
-- Scene Three.js dengan lighting ambient dan directional
-- Camera perspective dengan field of view 75°
-- WebGL renderer dengan anti-aliasing
+### Scene Setup
+- Three.js scene with ambient and directional lighting
+- Perspective camera with 75° field of view
+- WebGL renderer with anti-aliasing
 
 ### Globe Rendering
-- Sphere geometry dengan radius 5 unit
-- Tekstur bumi dari NASA Blue Marble
-- Material Phong untuk efek lighting realistis
+- Sphere geometry with 5 unit radius
+- Earth texture from NASA Blue Marble
+- Phong material for realistic lighting effects
 
-### Data Geografis
-Kota-kota yang ditampilkan:
+### Geographic Data
+Cities displayed:
 - **Jakarta** (106.8456°E, 6.2088°S)
 - **Tokyo** (139.6917°E, 35.6895°N)
 - **New York** (74.0060°W, 40.7128°N)
@@ -50,39 +50,39 @@ Kota-kota yang ditampilkan:
 - **Cairo** (31.2357°E, 30.0444°N)
 - **Rio de Janeiro** (43.1729°W, 22.9068°S)
 
-### Interaktivitas
-- **Raycasting**: Deteksi klik pada objek 3D
-- **OrbitControls**: Kontrol kamera yang smooth
-- **Popup System**: Menampilkan informasi kota yang diklik
+### Interactivity
+- **Raycasting**: 3D object click detection
+- **OrbitControls**: Smooth camera controls
+- **Popup System**: Display city information on click
 
 ## 🎨 Styling
 
-- **Dark Theme**: Background hitam dengan teks putih
-- **Info Box**: Panel informasi dengan transparansi dan border
-- **Popup**: Tooltip dengan styling modern dan responsive
-- **Font**: Inter font family untuk tipografi yang bersih
+- **Dark Theme**: Black background with white text
+- **Info Box**: Information panel with transparency and border
+- **Popup**: Modern and responsive tooltip styling
+- **Font**: Inter font family for clean typography
 
-## 📱 Responsivitas
+## 📱 Responsiveness
 
-- Menyesuaikan dengan ukuran window browser
+- Adapts to browser window size
 - High-DPI display support
-- Touch-friendly controls untuk perangkat mobile
+- Touch-friendly controls for mobile devices
 
-## 🔧 Konfigurasi
+## 🔧 Configuration
 
 ### Orbit Controls
-- **Damping**: 0.05 untuk gerakan yang smooth
-- **Min Distance**: 6.5 unit (zoom maksimal)
-- **Max Distance**: 50 unit (zoom minimal)
-- **Screen Space Panning**: Disabled untuk kontrol yang lebih natural
+- **Damping**: 0.05 for smooth movement
+- **Min Distance**: 6.5 units (maximum zoom)
+- **Max Distance**: 50 units (minimum zoom)
+- **Screen Space Panning**: Disabled for more natural control
 
 ### Lighting
-- **Ambient Light**: 0.5 intensity untuk pencahayaan umum
-- **Directional Light**: 1.0 intensity dari posisi (5, 3, 5)
+- **Ambient Light**: 0.5 intensity for general illumination
+- **Directional Light**: 1.0 intensity from position (5, 3, 5)
 
 ## 🌐 Dependencies
 
-Aplikasi menggunakan CDN untuk Three.js:
+The application uses CDN for Three.js:
 ```html
 <script type="importmap">
 {
@@ -96,37 +96,37 @@ Aplikasi menggunakan CDN untuk Three.js:
 
 ## 📋 Browser Requirements
 
-- **WebGL Support**: Browser harus mendukung WebGL
-- **ES6 Modules**: Support untuk JavaScript modules
+- **WebGL Support**: Browser must support WebGL
+- **ES6 Modules**: Support for JavaScript modules
 - **Modern Browser**: Chrome 61+, Firefox 60+, Safari 10.1+, Edge 16+
 
 ## 🌐 Live Demo
 
-**Demo Online**: [https://rizkiagussalim.github.io/interactive-3d-globe](https://rizkiagussalim.github.io/interactive-3d-globe)
+**Online Demo**: [https://rizkiagussalim.github.io/interactive-3d-globe](https://rizkiagussalim.github.io/interactive-3d-globe)
 
-## 🚀 Cara Menjalankan
+## 🚀 How to Run
 
-1. Clone atau download repository ini
-2. Buka file `index.html` di browser
-3. Pastikan koneksi internet aktif (untuk loading tekstur bumi)
+1. Clone or download this repository
+2. Open `index.html` file in a browser
+3. Ensure internet connection is active (for loading earth texture)
 
-## 🔮 Pengembangan Selanjutnya
+## 🔮 Future Development
 
-- [ ] Tambah lebih banyak kota dan data
-- [ ] Implementasi search dan filter
-- [ ] Animasi rotasi otomatis
-- [ ] Mode malam/siang
-- [ ] Export screenshot
+- [ ] Add more cities and data
+- [ ] Implement search and filter
+- [ ] Automatic rotation animation
+- [ ] Day/night mode
+- [ ] Screenshot export
 - [ ] Mobile gesture support
 
-## 📄 Lisensi
+## 📄 License
 
-Proyek ini open source dan tersedia untuk penggunaan pribadi maupun komersial.
+This project is open source and available for both personal and commercial use.
 
-## 👨‍💻 Dibuat Oleh
+## 👨‍💻 Created By
 
-Dikembangkan dengan ❤️ menggunakan Three.js dan teknologi web modern.
+Developed with ❤️ using Three.js and modern web technologies.
 
 ---
 
-**Note**: Pastikan browser Anda mendukung WebGL dan ES6 modules untuk menjalankan aplikasi ini dengan optimal.
+**Note**: Make sure your browser supports WebGL and ES6 modules to run this application optimally.
