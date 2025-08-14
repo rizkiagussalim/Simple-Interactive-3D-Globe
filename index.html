@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Globe with GeoJSON Data</title>
+    <style>
+        /* Basic styling to make the canvas fill the entire screen */
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #111;
+            color: #fff;
+        }
+        canvas {
+            display: block;
+        }
+        /* Styling for the main info box */
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 300px;
+            z-index: 10;
+        }
+        h1 {
+            font-size: 1.2em;
+            margin: 0 0 5px 0;
+        }
+        p {
+            font-size: 0.9em;
+            margin: 0;
+        }
+        /* Styling for the location popup */
+        #popup {
+            position: absolute;
+            display: none; /* Hidden by default */
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 1em;
+            pointer-events: none; /* Prevents the popup from interfering with mouse events */
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h1>Globe 3D Interaktif</h1>
+        <p>Klik sebuah titik untuk melihat nama kota. Gunakan mouse untuk memutar, zoom, dan geser.</p>
+    </div>
+
+    <!-- Popup element to display city name -->
+    <div id="popup"></div>
+
+    <!-- We use ES module imports, so the script tag needs type="module" -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true // Enable anti-aliasing for smoother edges
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio); // Adjust for high-DPI screens
+        document.body.appendChild(renderer.domElement);
+
+        // --- LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 3, 5);
+        scene.add(directionalLight);
+
+        // --- GLOBE (EARTH) ---
+        const globeRadius = 5;
+        const globeGeometry = new THREE.SphereGeometry(globeRadius, 64, 64);
+        const textureLoader = new THREE.TextureLoader();
+        const earthTexture = textureLoader.load(
+            'https://unpkg.com/three-globe@2.27.2/example/img/earth-blue-marble.jpg',
+            () => { animate(); },
+            undefined,
+            () => {
+                console.error('An error occurred while loading the texture.');
+                const fallbackMaterial = new THREE.MeshPhongMaterial({ color: 0x2255ff });
+                const globe = new THREE.Mesh(globeGeometry, fallbackMaterial);
+                scene.add(globe);
+                animate();
+            }
+        );
+        const globeMaterial = new THREE.MeshPhongMaterial({ map: earthTexture });
+        const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+        scene.add(globe);
+
+        // --- CONTROLS ---
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.screenSpacePanning = false;
+        controls.minDistance = 6.5;
+        controls.maxDistance = 50;
+
+        // --- GEOJSON DATA & VISUALIZATION ---
+        const geoJsonData = {
+          "type": "FeatureCollection",
+          "features": [
+            { "type": "Feature", "properties": { "name": "Jakarta" }, "geometry": { "type": "Point", "coordinates": [ 106.8456, -6.2088 ] } },
+            { "type": "Feature", "properties": { "name": "Tokyo" }, "geometry": { "type": "Point", "coordinates": [ 139.6917, 35.6895 ] } },
+            { "type": "Feature", "properties": { "name": "New York" }, "geometry": { "type": "Point", "coordinates": [ -74.0060, 40.7128 ] } },
+            { "type": "Feature", "properties": { "name": "London" }, "geometry": { "type": "Point", "coordinates": [ -0.1278, 51.5074 ] } },
+            { "type": "Feature", "properties": { "name": "Sydney" }, "geometry": { "type": "Point", "coordinates": [ 151.2093, -33.8688 ] } },
+            { "type": "Feature", "properties": { "name": "Cairo" }, "geometry": { "type": "Point", "coordinates": [ 31.2357, 30.0444 ] } },
+            { "type": "Feature", "properties": { "name": "Rio de Janeiro" }, "geometry": { "type": "Point", "coordinates": [ -43.1729, -22.9068 ] } }
+          ]
+        };
+
+        function convertLatLonToVec3(lat, lon, radius) {
+            const phi = (90 - lat) * (Math.PI / 180);
+            const theta = (lon + 180) * (Math.PI / 180);
+            const x = -(radius * Math.sin(phi) * Math.cos(theta));
+            const y = radius * Math.cos(phi);
+            const z = radius * Math.sin(phi) * Math.sin(theta);
+            return new THREE.Vector3(x, y, z);
+        }
+
+        const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xff4136 });
+        const pointGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+        const interactableObjects = []; // Array to hold the points for raycasting
+
+        geoJsonData.features.forEach(feature => {
+            const [lon, lat] = feature.geometry.coordinates;
+            const position = convertLatLonToVec3(lat, lon, globeRadius);
+            const pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+            pointMesh.position.copy(position);
+            
+            // Store the city name in the mesh's userData property
+            pointMesh.userData.name = feature.properties.name;
+
+            globe.add(pointMesh);
+            interactableObjects.push(pointMesh); // Add to interactable list
+        });
+        
+        camera.position.z = 10;
+
+        // --- INTERACTIVITY (RAYCASTING) ---
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const popupDiv = document.getElementById('popup');
+
+        function onMouseClick(event) {
+            // Calculate mouse position in normalized device coordinates (-1 to +1)
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the picking ray with the camera and mouse position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Calculate objects intersecting the picking ray
+            const intersects = raycaster.intersectObjects(interactableObjects);
+
+            if (intersects.length > 0) {
+                // Get the first intersected object (the closest one)
+                const clickedObject = intersects[0].object;
+                const cityName = clickedObject.userData.name;
+
+                // Update popup content and position
+                popupDiv.textContent = cityName;
+                popupDiv.style.display = 'block';
+                popupDiv.style.left = `${event.clientX + 10}px`;
+                popupDiv.style.top = `${event.clientY + 10}px`;
+            } else {
+                // Hide popup if nothing was clicked
+                popupDiv.style.display = 'none';
+            }
+        }
+        
+        // Add click event listener
+        window.addEventListener('click', onMouseClick);
+
+        // --- ANIMATION LOOP ---
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // --- RESIZE HANDLER ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    </script>
+</body>
+</html>
