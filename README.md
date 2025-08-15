@@ -102,7 +102,7 @@ The application uses CDN for Three.js:
 
 ## 🌐 Live Demo
 
-**Online Demo**: [https://rizkiagussalim.github.io/interactive-3d-globe](https://rizkiagussalim.github.io/interactive-3d-globe)
+**Online Demo**: [https://rizkiagussalim.github.io/Simple-Interactive-3D-Globe](https://rizkiagussalim.github.io/Simple-Interactive-3D-Globe)
 
 ## 🚀 How to Run
 
