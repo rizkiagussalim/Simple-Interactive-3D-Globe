@@ -119,10 +119,6 @@ The application uses CDN for Three.js:
 - [ ] Screenshot export
 - [ ] Mobile gesture support
 
-## 📄 License
-
-This project is open source and available for both personal and commercial use.
-
 ## 👨‍💻 Created By
 
 Developed with ❤️ using Three.js and modern web technologies.
